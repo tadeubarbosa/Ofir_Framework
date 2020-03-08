@@ -1,24 +1,8 @@
 <?php
 
-$URI         = $_SERVER['REQUEST_URI'];
-$scriptName = $_SERVER['SCRIPT_NAME'];
-
-# remove ? and # from URI
-$URI = preg_replace('/(.*)\?(.*)/', "$1", $URI);
-$URI = preg_replace('/(.*)\#(.*)/', "$1", $URI);
-
-# remove index.php fromt DOCUMENT_URI
-$scriptName = dirname($scriptName, 1);
-
-# removes the first part from URI.
-# that part is the folder before public
-# if the DOCUMENT_URI is not '/', in others words,
-# if the DOCUMENT_URI is not empty
-if ($scriptName!=='/') {
-    $URI = str_replace($scriptName, '', $URI);
-}
-# removes the first bar
-$URI = trim($URI, '/');
+$PHPSELF = $_SERVER['PHP_SELF'];
+$PHPSELF = str_replace('index.php', '', $PHPSELF);
+$BRANCH = trim($PHPSELF, '/');
 
 # get the actual SCRIPT_FILENAME (e.g.: /home/.../site/public/index.php)
 # and removes public/index.php from get path to this project
@@ -33,12 +17,10 @@ $SCHEME .= isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on'? 's': '';
 # lowered method
 $REQUEST_METHOD = strtolower($_SERVER['REQUEST_METHOD']);
 
+$SERVERNAME = $_SERVER['SERVER_NAME'];
+
 # get actual url
-$BASE = "{$SCHEME}://{$_SERVER['SERVER_NAME']}{$scriptName}";
-# adds a final bar if not contains
-if ($BASE[strlen($BASE)-1] !== '/') {
-    $BASE .= "/";
-}
+$BASE = "{$SCHEME}://{$SERVERNAME}/{$BRANCH}";
 
 # this is the url base of this project
 define('BASE',   $BASE);
@@ -55,4 +37,4 @@ define('REQUEST_METHOD', $REQUEST_METHOD);
 # this is the branch that someone is tryng to access:
 # users, users/test, about...
 # empty branch is like home route
-define('BRANCH', $URI);
+define('BRANCH', $BRANCH);
