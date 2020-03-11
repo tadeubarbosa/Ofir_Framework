@@ -12,8 +12,14 @@ require_once("config-timezone.php");
 # configures session security
 require_once("session-config.php");
 
-# includes the file resposible for define initial consts
-require_once("defines.php");
+$request = new Ofir\Http\Request;
+
+dd($request);
+
+exit;
+
+// # includes the file resposible for define initial consts
+// require_once("defines.php");
 
 # include the Database class
 require_once(__DIR__ . '/../Database/Database.php');
